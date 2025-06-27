@@ -1,0 +1,24 @@
+# 개발용 Dockerfile - 빠른 빌드를 위한 설정
+FROM openjdk:17-jdk-slim
+
+WORKDIR /app
+
+# SQLite 설치
+RUN apt-get update && apt-get install -y sqlite3 curl && rm -rf /var/lib/apt/lists/*
+
+# Gradle Wrapper 복사
+COPY gradlew ./
+COPY gradle ./gradle
+RUN chmod +x gradlew
+
+# 의존성 파일 복사 (캐시 활용)
+COPY build.gradle settings.gradle ./
+
+# 소스 코드는 볼륨으로 마운트
+VOLUME ["/app/src", "/app/data", "/app/uploads"]
+
+# 포트 노출
+EXPOSE 8080
+
+# 개발 모드로 실행 (핫 리로드 지원)
+CMD ["./gradlew", "bootRun", "--continuous"]

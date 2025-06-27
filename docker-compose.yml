@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  chat-backend:
+    build: ./back
+    container_name: chat-backend
+    ports:
+      - "8080:8080"
+    volumes:
+      # 데이터베이스 파일 영구 저장
+      - chat-data:/app/data
+      # 업로드 파일 영구 저장
+      - chat-uploads:/app/uploads
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  chat-data:
+    driver: local
+  chat-uploads:
+    driver: local
