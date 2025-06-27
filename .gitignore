@@ -1,0 +1,35 @@
+# Build directories
+front/build/
+front/.build/
+front/DerivedData/
+build/
+
+# Swift Package Manager
+front/.swiftpm/
+front/Package.resolved
+*.xcodeproj
+*.xcworkspace
+
+# macOS
+.DS_Store
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+back/target/
+back/build/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp

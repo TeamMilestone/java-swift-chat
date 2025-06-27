@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+</head>
+<body>
+    <h2>WebSocket/STOMP Test</h2>
+    <div id="status">Disconnected</div>
+    
+    <button onclick="connect()">Connect</button>
+    <button onclick="disconnect()">Disconnect</button>
+    
+    <br><br>
+    
+    <input type="text" id="roomId" placeholder="Room ID" value="1">
+    <button onclick="subscribe()">Subscribe to Room</button>
+    
+    <br><br>
+    
+    <input type="text" id="message" placeholder="Message">
+    <button onclick="sendMessage()">Send Message</button>
+    
+    <div id="messages"></div>
+
+    <script>
+        var stompClient = null;
+        
+        function connect() {
+            var socket = new SockJS('http://localhost:8080/ws');
+            stompClient = Stomp.over(socket);
+            
+            stompClient.connect({}, function(frame) {
+                console.log('Connected: ' + frame);
+                document.getElementById('status').innerHTML = 'Connected';
+                addMessage('Connected to server');
+            }, function(error) {
+                console.log('Error: ' + error);
+                document.getElementById('status').innerHTML = 'Error: ' + error;
+                addMessage('Connection error: ' + error);
+            });
+        }
+        
+        function disconnect() {
+            if (stompClient !== null) {
+                stompClient.disconnect();
+            }
+            document.getElementById('status').innerHTML = 'Disconnected';
+            addMessage('Disconnected');
+        }
+        
+        function subscribe() {
+            var roomId = document.getElementById('roomId').value;
+            
+            if (stompClient && stompClient.connected) {
+                stompClient.subscribe('/topic/chatroom.' + roomId, function(message) {
+                    addMessage('Received: ' + message.body);
+                });
+                addMessage('Subscribed to room ' + roomId);
+            } else {
+                addMessage('Not connected! Please connect first.');
+            }
+        }
+        
+        function sendMessage() {
+            var roomId = document.getElementById('roomId').value;
+            var message = document.getElementById('message').value;
+            
+            if (stompClient && stompClient.connected) {
+                stompClient.send("/app/chat.send/" + roomId, {}, JSON.stringify({
+                    'senderId': 1,
+                    'content': message
+                }));
+                addMessage('Sent: ' + message);
+                document.getElementById('message').value = '';
+            } else {
+                addMessage('Not connected! Please connect first.');
+            }
+        }
+        
+        function addMessage(message) {
+            var messages = document.getElementById('messages');
+            messages.innerHTML += '<p>' + new Date().toLocaleTimeString() + ' - ' + message + '</p>';
+            messages.scrollTop = messages.scrollHeight;
+        }
+    </script>
+    
+    <style>
+        #messages {
+            border: 1px solid #ccc;
+            height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            margin-top: 10px;
+        }
+    </style>
+</body>
+</html>

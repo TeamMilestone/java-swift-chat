@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple WebSocket Test for iOS</title>
+</head>
+<body>
+    <h2>Simple WebSocket Test (iOS Style)</h2>
+    <div id="status">Disconnected</div>
+    
+    <button onclick="connect()">Connect</button>
+    <button onclick="disconnect()">Disconnect</button>
+    
+    <br><br>
+    
+    <input type="text" id="roomId" placeholder="Room ID" value="1">
+    <button onclick="subscribeToRoom()">Subscribe to Room</button>
+    <button onclick="unsubscribeFromRoom()">Unsubscribe from Room</button>
+    
+    <br><br>
+    
+    <button onclick="sendRESTMessage()">Send Message via REST API</button>
+    
+    <div id="messages"></div>
+
+    <script>
+        var socket = null;
+        
+        function connect() {
+            socket = new WebSocket('ws://localhost:8080/chat');
+            
+            socket.onopen = function(event) {
+                console.log('Connected to WebSocket');
+                document.getElementById('status').innerHTML = 'Connected';
+                addMessage('Connected to WebSocket');
+            };
+            
+            socket.onmessage = function(event) {
+                console.log('Received:', event.data);
+                try {
+                    var data = JSON.parse(event.data);
+                    addMessage('Received: ' + JSON.stringify(data, null, 2));
+                } catch (e) {
+                    addMessage('Received: ' + event.data);
+                }
+            };
+            
+            socket.onclose = function(event) {
+                console.log('WebSocket closed');
+                document.getElementById('status').innerHTML = 'Disconnected';
+                addMessage('WebSocket closed');
+            };
+            
+            socket.onerror = function(error) {
+                console.log('WebSocket error:', error);
+                addMessage('WebSocket error: ' + error);
+            };
+        }
+        
+        function disconnect() {
+            if (socket) {
+                socket.close();
+            }
+        }
+        
+        function subscribeToRoom() {
+            var roomId = parseInt(document.getElementById('roomId').value);
+            
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                var message = {
+                    type: 'subscribe',
+                    roomId: roomId
+                };
+                socket.send(JSON.stringify(message));
+                addMessage('Sent subscribe request for room ' + roomId);
+            } else {
+                addMessage('WebSocket not connected!');
+            }
+        }
+        
+        function unsubscribeFromRoom() {
+            var roomId = parseInt(document.getElementById('roomId').value);
+            
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                var message = {
+                    type: 'unsubscribe',
+                    roomId: roomId
+                };
+                socket.send(JSON.stringify(message));
+                addMessage('Sent unsubscribe request for room ' + roomId);
+            } else {
+                addMessage('WebSocket not connected!');
+            }
+        }
+        
+        function sendRESTMessage() {
+            var roomId = parseInt(document.getElementById('roomId').value);
+            
+            fetch(`http://localhost:8080/api/chat/rooms/${roomId}/messages`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    senderId: 1,
+                    content: 'Test message from REST API'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                addMessage('REST API response: ' + JSON.stringify(data, null, 2));
+            })
+            .catch(error => {
+                addMessage('REST API error: ' + error);
+            });
+        }
+        
+        function addMessage(message) {
+            var messages = document.getElementById('messages');
+            messages.innerHTML += '<p>' + new Date().toLocaleTimeString() + ' - ' + message + '</p>';
+            messages.scrollTop = messages.scrollHeight;
+        }
+    </script>
+    
+    <style>
+        #messages {
+            border: 1px solid #ccc;
+            height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+            margin-top: 10px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        button {
+            margin: 5px;
+            padding: 5px 10px;
+        }
+        input {
+            margin: 5px;
+            padding: 5px;
+        }
+    </style>
+</body>
+</html>
