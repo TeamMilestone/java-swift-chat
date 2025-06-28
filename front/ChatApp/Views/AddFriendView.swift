@@ -75,7 +75,7 @@ struct AddFriendView: View {
                 } else {
                     List(searchResults) { friend in
                         HStack {
-                            AsyncImage(url: URL(string: "http://localhost:8080\(friend.profileImageUrl)")) { image in
+                            AsyncImage(url: URL(string: "https://chat.team-milestone.click\(friend.profileImageUrl)")) { image in
                                 image
                                     .resizable()
                                     .scaledToFill()

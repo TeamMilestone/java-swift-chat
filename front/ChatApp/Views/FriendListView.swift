@@ -197,7 +197,7 @@ struct FriendRow: View {
     
     var body: some View {
         HStack(spacing: 12) {
-            AsyncImage(url: URL(string: "http://localhost:8080\(friend.profileImageUrl)")) { image in
+            AsyncImage(url: URL(string: "https://chat.team-milestone.click\(friend.profileImageUrl)")) { image in
                 image
                     .resizable()
                     .scaledToFill()

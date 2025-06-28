@@ -92,7 +92,7 @@ struct ChatRoomRow: View {
     
     var body: some View {
         HStack(spacing: 12) {
-            AsyncImage(url: URL(string: "http://localhost:8080\(chatRoom.getProfileImageUrl(currentUserId: currentUserId))")) { image in
+            AsyncImage(url: URL(string: "https://chat.team-milestone.click\(chatRoom.getProfileImageUrl(currentUserId: currentUserId))")) { image in
                 image
                     .resizable()
                     .scaledToFill()

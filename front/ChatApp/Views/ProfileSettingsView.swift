@@ -23,7 +23,7 @@ struct ProfileSettingsView: View {
                                     .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                             )
                     } else if let profileImageUrl = viewModel.profileImageUrl {
-                        let fullUrl = "http://localhost:8080\(profileImageUrl)"
+                        let fullUrl = "https://chat.team-milestone.click\(profileImageUrl)"
                         let _ = print("Profile image URL: \(fullUrl)")
                         AsyncImage(url: URL(string: fullUrl)) { phase in
                             switch phase {
@@ -73,7 +73,7 @@ struct ProfileSettingsView: View {
                             .foregroundColor(.gray)
                         
                         if let profileImageUrl = viewModel.profileImageUrl {
-                            Text("전체 URL: http://localhost:8080\(profileImageUrl)")
+                            Text("전체 URL: https://chat.team-milestone.click\(profileImageUrl)")
                                 .font(.system(size: 11))
                                 .foregroundColor(.gray)
                         }

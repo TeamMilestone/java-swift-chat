@@ -8,7 +8,7 @@ class SocketManager: NSObject, ObservableObject {
     @Published var receivedMessages: [Message] = []
     
     private var webSocket: WebSocket?
-    private let baseURL = "ws://localhost:8080/chat"
+    private let baseURL = "wss://chat.team-milestone.click/chat"
     private var subscribedRooms: Set<Int> = []
     
     override init() {
