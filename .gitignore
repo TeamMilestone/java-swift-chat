@@ -42,3 +42,19 @@ logs/
 back/deploy.tar.gz
 back/deploy/
 backend/
+
+# iOS certificates and profiles
+*.mobileprovision
+*.p12
+*.cer
+*.p8
+ExportOptions.plist
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# JWT keys
+*.key
+*.pem
