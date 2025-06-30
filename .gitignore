@@ -57,4 +57,4 @@ ExportOptions.plist
 
 # JWT keys
 *.key
-*.pem
+*.pem*.xcuserstate
