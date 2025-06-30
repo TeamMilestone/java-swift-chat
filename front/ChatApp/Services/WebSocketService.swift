@@ -7,7 +7,7 @@ class WebSocketService: NSObject, ObservableObject {
     
     private var webSocketTask: URLSessionWebSocketTask?
     private var urlSession: URLSession!
-    private let baseURL = "wss://chat.team-milestone.click/ws"
+    private let baseURL = Config.wsURL
     
     override init() {
         super.init()

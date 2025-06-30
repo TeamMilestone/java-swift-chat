@@ -3,7 +3,7 @@ import Foundation
 class ChatAPIService: ObservableObject {
     static let shared = ChatAPIService()
     
-    private let baseURL = "https://chat.team-milestone.click/api"
+    private let baseURL = "\(Config.baseURL)/api"
     
     private func createAuthRequest(url: URL, method: String = "GET") -> URLRequest {
         var request = URLRequest(url: url)

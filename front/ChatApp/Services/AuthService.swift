@@ -6,7 +6,7 @@ class AuthService: ObservableObject {
     @Published var currentUser: User?
     @Published var authToken: String?
     
-    private let baseURL = "https://chat.team-milestone.click/api"
+    private let baseURL = "\(Config.baseURL)/api"
     
     func login(username: String, password: String) async throws -> Bool {
         let url = URL(string: "\(baseURL)/auth/login")!
