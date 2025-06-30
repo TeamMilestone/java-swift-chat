@@ -14,7 +14,7 @@ echo -e "\n${YELLOW}사용 가능한 iOS 시뮬레이터:${NC}"
 xcrun simctl list devices available | grep -E "iPhone|iPad"
 
 # 2. 기본 시뮬레이터 설정 (iPhone 15 Pro)
-DEFAULT_SIMULATOR="iPhone 15 Pro"
+DEFAULT_SIMULATOR="iPhone 16 Pro"
 echo -e "\n${YELLOW}기본 시뮬레이터: $DEFAULT_SIMULATOR${NC}"
 
 # 3. 시뮬레이터 부팅
